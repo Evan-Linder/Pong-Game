@@ -1,33 +1,42 @@
 import pygame
 from paddle import Paddle
+from ball import Ball
 
 class Game:
     # game constants (unmutable).
     WIDTH, HEIGHT = 700, 500
     WHITE = (255, 255, 255)
     RED = (255, 0, 0)
-    PADDLE_WIDTH, PADDLE_HEIGHT = 10, 80
+    PADDLE_WIDTH, PADDLE_HEIGHT = 10, 90
+    BALL_RADIUS = 7
 
     def __init__(self):
         pygame.init()
 
         # set width and height in a tuple to avoid error and make it unmutable.
         self.win = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
-        pygame.display.set_caption("Pong game CIS 121")
+        pygame.display.set_caption("Pong game-CIS 121")
 
 
         #initalize the paddles (10 pixels from the edge, centered vertically)
         self.left_paddle = Paddle(10, self.HEIGHT * 0.5 - self.PADDLE_HEIGHT * 0.5, self.PADDLE_WIDTH, self.PADDLE_HEIGHT)
         self.right_paddle = Paddle(self.WIDTH - 10 - self.PADDLE_WIDTH, self.HEIGHT * 0.5 - self.PADDLE_HEIGHT * 0.5, self.PADDLE_WIDTH, self.PADDLE_HEIGHT)
 
-    
+        #initalize the ball (centered vertically and horizontally).
+        self.ball = Ball(self.WIDTH * 0.5, self.HEIGHT * 0.5, self.BALL_RADIUS)
 
+    
     def draw_objects(self):
+
         #set background to red.
         self.win.fill(self.RED)
 
+        # draw both paddles in the list.
         for paddle in (self.left_paddle, self.right_paddle):
-            paddle.draw_objects(self.win)
+            paddle.draw_paddles(self.win)
+        
+        # draw ball
+        self.ball.draw_ball(self.win)
             
     def paddle_movement(self, keys):
         # checks left paddle for key presses. (W and S)
@@ -37,7 +46,7 @@ class Game:
             self.left_paddle.move(up=False)
 
         # checks right paddle for key presses. (Up and down arrows)
-        if keys[pygame.K_UP] and self.right_paddle.y - self.right_paddle.PADDLE_VELOCITY >= 0:
+        if keys[pygame.K_UP] and self.right_paddle.y - self.right_paddle.PADDLE_VELOCITY >= 0: # ensure paddle stays within the window.
             self.right_paddle.move(up=True)
         if keys[pygame.K_DOWN] and self.right_paddle.y + self.right_paddle.PADDLE_VELOCITY + self.right_paddle.height <= self.HEIGHT:
             self.right_paddle.move(up=False)

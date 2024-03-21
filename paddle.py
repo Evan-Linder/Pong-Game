@@ -4,20 +4,20 @@ class Paddle:
     WHITE = (255,255,255)
     PADDLE_VELOCITY = 6
 
-    def __init__(self, x, y, width, height):
-        #set x,y to both self.x,y and self.original_x,y
-        self.x = self.original_x = x
-        self.y = self.original_y = y
-        self.width = width
-        self.height = height
+    def __init__(self, _x, _y, _width, _height):
+        #set x,y to both self.x,y and self.original_x,y (use original to reset paddles).
+        self.x = self.original_x = _x
+        self.y = self.original_y = _y
+        self.width = _width
+        self.height = _height
 
-    def draw_objects(self, win):
-        #draw a rectangle object on the window with specified dimensions.
+    #draw paddles on the window.
+    def draw_paddles(self, win):
         pygame.draw.rect(win, self.WHITE, (self.x, self.y, self.width, self.height))
 
 
     def move(self, up = True):
-        #if up is true adjust paddle velocity to go up (y-cor.), else apply the opposite logic.
+        #if up is true adjust paddle velocity to go up (y-coor.), else apply the opposite logic.
         if up:
             self.y -= self.PADDLE_VELOCITY
 
