@@ -30,24 +30,17 @@ class Game:
             paddle.draw_objects(self.win)
             
     def paddle_movement(self, keys):
-        #cheks lef paddle for key press and moves paddle up or down(W and S).
-        if  keys[pygame.K_w] and self.left_paddle.y - self.left_paddle.PADDLE_VELOCITY >= 0:
+        # checks left paddle for key presses. (W and S)
+        if keys[pygame.K_w] and self.left_paddle.y - self.left_paddle.PADDLE_VELOCITY >= 0:
             self.left_paddle.move(up=True)
         if keys[pygame.K_s] and self.left_paddle.y + self.left_paddle.PADDLE_VELOCITY + self.left_paddle.height <= self.HEIGHT:
             self.left_paddle.move(up=False)
 
-        #cheks lef paddle for key press and moves paddle up or down(upnand down).
-        if  keys[pygame.K_UP] and self.right_paddle.y - self.left_paddle.PADDLE_VELOCITY >= 0:
-            self.left_paddle.move(up=True)
-        if keys[pygame.K_DOWN] and self.right_paddle.y + self.left_paddle.PADDLE_VELOCITY + self.left_paddle.height <= self.HEIGHT:
-            self.left_paddle.move(up=False)
-
-
-    def run(self):
-        #update the display
-        pygame.display.update()
-
-
+        # checks right paddle for key presses. (Up and down arrows)
+        if keys[pygame.K_UP] and self.right_paddle.y - self.right_paddle.PADDLE_VELOCITY >= 0:
+            self.right_paddle.move(up=True)
+        if keys[pygame.K_DOWN] and self.right_paddle.y + self.right_paddle.PADDLE_VELOCITY + self.right_paddle.height <= self.HEIGHT:
+            self.right_paddle.move(up=False)
 
 
     def run_game(self):
@@ -60,5 +53,10 @@ class Game:
 
             #draw game objects.
             self.draw_objects()
+            keys = pygame.key.get_pressed()
+            self.paddle_movement(keys)
             pygame.display.update()
+
+            clock = pygame.time.Clock()
+            clock.tick(60)
 
