@@ -2,7 +2,7 @@ import pygame
 
 class Paddle:
     WHITE = (255,255,255)
-    PADDLE_VELOCITY = 5
+    PADDLE_VELOCITY = 6
 
     def __init__(self, x, y, width, height):
         #set x,y to both self.x,y and self.original_x,y
