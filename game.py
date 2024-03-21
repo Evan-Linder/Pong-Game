@@ -28,6 +28,13 @@ class Game:
 
         for paddle in (self.left_paddle, self.right_paddle):
             paddle.draw_objects(self.win)
+            
+    def paddle_movement(self, keys):
+        #cheks lef paddle for key press and moves paddle up or down(S and S).
+        if  keys[pygame.K_w] and self.lef_paddle.y - self.left_paddle.PADDLE_VELOCITY >= 0:
+            self.left_paddle.move(up=True)
+        if keys[pygame.K_s] and self.left_paddle.y + self.left_paddle.PADDLE_VELOCITY + self.left_paddle.height <= self.HEIGHT:
+            self.left_paddle.move(up=False)
 
 
 
