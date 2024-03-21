@@ -17,6 +17,7 @@ class Paddle:
 
 
     def move(self, up = True):
+        #if up is true adjust paddle velocity to go up (y-cor.), else apply the opposite logic.
         if up:
             self.y -= self.PADDLE_VELOCITY
 

@@ -2,7 +2,7 @@ import pygame
 from paddle import Paddle
 
 class Game:
-    #create game constants (unmutable).
+    # game constants (unmutable).
     WIDTH, HEIGHT = 700, 500
     WHITE = (255, 255, 255)
     RED = (255, 0, 0)
@@ -53,9 +53,12 @@ class Game:
 
             #draw game objects.
             self.draw_objects()
+
+            #define keys and pass it as a paramater to paddle_movement.
             keys = pygame.key.get_pressed()
             self.paddle_movement(keys)
             pygame.display.update()
 
+            # set game fps to 60 so velocity works accordingly (avoids screen tearing).
             clock = pygame.time.Clock()
             clock.tick(60)
