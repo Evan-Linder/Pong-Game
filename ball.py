@@ -17,11 +17,19 @@ class Ball:
     def draw_ball(self, win):
         pygame.draw.circle(win, self.WHITE, (self.x, self.y), self.radius)
 
+    #ajust ball velocity
     def move_ball(self):
-        #move the ball
+        
         self.x += self.x_velocity
         self.y += self.y_velocity
     
+    #reset the ball to original position and reverse the velocity.
+    def reset_ball(self):
+        self.x = self.original_x
+        self.y = self.original_y
+        self.y_velocity = 0
+        self.x_velocity *= -1
+
 
 
 

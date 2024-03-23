@@ -63,8 +63,13 @@ class Game:
             #draw game objects.
             self.draw_objects()
 
-            #ball movement
+            #ball movement/reset if the ball goes out of bounds (left or right). 
             self.ball.move_ball()
+
+            if self.ball.x < 0:
+                self.ball.reset_ball()
+            elif self.ball.x > self.WIDTH:
+                self.ball.reset_ball()
 
             #define keys and pass it as a paramater to paddle_movement.
             keys = pygame.key.get_pressed()
