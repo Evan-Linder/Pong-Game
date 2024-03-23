@@ -63,6 +63,9 @@ class Game:
             #draw game objects.
             self.draw_objects()
 
+            #ball movement
+            self.ball.move_ball()
+
             #define keys and pass it as a paramater to paddle_movement.
             keys = pygame.key.get_pressed()
             self.paddle_movement(keys)
