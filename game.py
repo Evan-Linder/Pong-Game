@@ -51,6 +51,25 @@ class Game:
         if keys[pygame.K_DOWN] and self.right_paddle.y + self.right_paddle.PADDLE_VELOCITY + self.right_paddle.height <= self.HEIGHT:
             self.right_paddle.move(up=False)
 
+    def collision(self):
+        # Check if the ball has hit the top or bottom edge and reverse the velocity.
+        if self.ball.y + self.ball.radius >= self.HEIGHT:
+            self.ball.y_velocity *= -1
+        elif self.ball.y - self.ball.radius <= 0:
+            self.ball.y_velocity *= -1
+
+         # Check if the ball is moving left. If true, check for collision with the left paddle.
+        if self.ball.x_velocity < 0:
+            if self.ball.y >= self.left_paddle.y and self.ball.y <= self.left_paddle.y + self.left_paddle.height:
+                 if self.ball.x - self.ball.radius <= self.left_paddle.x + self.left_paddle.width:
+                    self.ball.x_velocity *= -1
+
+    # Check if the ball is moving right. If true, check for collision with the right paddle.
+        else:
+            if self.ball.y >= self.right_paddle.y and self.ball.y <= self.right_paddle.y + self.right_paddle.height:
+                if self.ball.x + self.ball.radius >= self.right_paddle.x:
+                    self.ball.x_velocity *= -1
+
 
     def run_game(self):
         # run the game.
@@ -79,3 +98,5 @@ class Game:
             # set game fps to 60 so velocity works accordingly (avoids screen tearing).
             clock = pygame.time.Clock()
             clock.tick(60)
+
+            self.collision()
