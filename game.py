@@ -31,9 +31,9 @@ class Game:
         #set background to red.
         self.win.fill(self.RED)
 
-        # draw both paddles in the list.
-        for paddle in (self.left_paddle, self.right_paddle):
-            paddle.draw_paddles(self.win)
+
+        for paddle in (self.left_paddle, self.right_paddle): #create a list with the paddles
+            paddle.draw_paddles(self.win) # draw the paddles in the list.
         
         # draw ball
         self.ball.draw_ball(self.win)
@@ -53,7 +53,7 @@ class Game:
 
     def collision(self):
         # Check if the ball has hit the top or bottom edge and reverse the x-velocity.
-        if self.ball.y + self.ball.radius >= self.HEIGHT:
+        if self.ball.y + self.ball.radius >= self.HEIGHT: 
             self.ball.y_velocity *= -1
         elif self.ball.y - self.ball.radius <= 0:
             self.ball.y_velocity *= -1
@@ -76,6 +76,12 @@ class Game:
             if self.ball.y >= self.right_paddle.y and self.ball.y <= self.right_paddle.y + self.right_paddle.height:
                 if self.ball.x + self.ball.radius >= self.right_paddle.x:
                     self.ball.x_velocity *= -1
+                    
+                    middle_y = self.right_paddle.y + self.left_paddle.height * 0.5 
+                    difference_in_y = middle_y - self.ball.y 
+                    reduction_factor = (self.right_paddle.height * 0.5) / self.ball.MAX_VELOCITY 
+                    y_velocity = difference_in_y / reduction_factor
+                    self.ball.y_velocity = -1 * y_velocity 
 
 
     def run_game(self):
