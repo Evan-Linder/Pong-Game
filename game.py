@@ -1,6 +1,6 @@
 import pygame
-from paddle import Paddle
-from ball import Ball
+from paddle import *
+from ball import *
 
 class Game:
     # game constants (unmutable).
@@ -40,31 +40,38 @@ class Game:
             
     def paddle_movement(self, keys):
         # checks left paddle for key presses. (W and S)
-        if keys[pygame.K_w] and self.left_paddle.y - self.left_paddle.PADDLE_VELOCITY >= 0:
+        if keys[pygame.K_w] and self.left_paddle.y - self.left_paddle.PADDLE_VELOCITY >= 0: # ensure paddle stays within the window.
             self.left_paddle.move(up=True)
         if keys[pygame.K_s] and self.left_paddle.y + self.left_paddle.PADDLE_VELOCITY + self.left_paddle.height <= self.HEIGHT:
             self.left_paddle.move(up=False)
 
         # checks right paddle for key presses. (Up and down arrows)
-        if keys[pygame.K_UP] and self.right_paddle.y - self.right_paddle.PADDLE_VELOCITY >= 0: # ensure paddle stays within the window.
+        if keys[pygame.K_UP] and self.right_paddle.y - self.right_paddle.PADDLE_VELOCITY >= 0: 
             self.right_paddle.move(up=True)
         if keys[pygame.K_DOWN] and self.right_paddle.y + self.right_paddle.PADDLE_VELOCITY + self.right_paddle.height <= self.HEIGHT:
             self.right_paddle.move(up=False)
 
     def collision(self):
-        # Check if the ball has hit the top or bottom edge and reverse the velocity.
+        # Check if the ball has hit the top or bottom edge and reverse the x-velocity.
         if self.ball.y + self.ball.radius >= self.HEIGHT:
             self.ball.y_velocity *= -1
         elif self.ball.y - self.ball.radius <= 0:
             self.ball.y_velocity *= -1
 
-         # Check if the ball is moving left. If true, check for collision with the left paddle.
+        # Check if the ball is moving left. If true, check for collision with the left paddle.
         if self.ball.x_velocity < 0:
             if self.ball.y >= self.left_paddle.y and self.ball.y <= self.left_paddle.y + self.left_paddle.height:
                  if self.ball.x - self.ball.radius <= self.left_paddle.x + self.left_paddle.width:
                     self.ball.x_velocity *= -1
+        
+                    # calculate how far the ball is from the middle of the paddle on collision.
+                    middle_y = self.left_paddle.y + self.left_paddle.height * 0.5 # find paddles middle.
+                    difference_in_y = middle_y - self.ball.y #find y-cord difference
+                    reduction_factor = (self.left_paddle.height * 0.5) / self.ball.MAX_VELOCITY #scale difference
+                    y_velocity = difference_in_y / reduction_factor # match balls y-velocity
+                    self.ball.y_velocity = -1 * y_velocity #reverse balls y-velocity
 
-    # Check if the ball is moving right. If true, check for collision with the right paddle.
+        #Check if the ball is moving right. If true, check for collision with the right paddle.
         else:
             if self.ball.y >= self.right_paddle.y and self.ball.y <= self.right_paddle.y + self.right_paddle.height:
                 if self.ball.x + self.ball.radius >= self.right_paddle.x:
