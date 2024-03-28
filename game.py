@@ -17,6 +17,11 @@ class Game:
         self.win = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
         pygame.display.set_caption("Pong game-CIS 121")
 
+        #create font
+        self.font = pygame.font.SysFont(None, 36)
+
+        #set scores to 0
+        self.left_score = 0
 
         #initalize the paddles (10 pixels from the edge, centered vertically)
         self.left_paddle = Paddle(10, self.HEIGHT * 0.5 - self.PADDLE_HEIGHT * 0.5, self.PADDLE_WIDTH, self.PADDLE_HEIGHT)
@@ -34,6 +39,11 @@ class Game:
 
         for paddle in (self.left_paddle, self.right_paddle): # loop over each paddle.
             paddle.draw_paddles(self.win) #Draw each paddle on the game window.
+
+        # draw the position and scoring text
+        left_score_text = self.font.render(f'P1: {self.left_score}', 1, self.WHITE)
+        self.win.blit(left_score_text, (self.WIDTH // 4 - left_score_text.get_width() * 0.5, 20))
+
         
         # draw ball
         self.ball.draw_ball(self.win)
