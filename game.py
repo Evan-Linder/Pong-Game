@@ -17,11 +17,12 @@ class Game:
         self.win = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
         pygame.display.set_caption("Pong game-CIS 121")
 
-        #create font
+        #create game text font
         self.font = pygame.font.SysFont(None, 36)
 
         #set scores to 0
         self.left_score = 0
+        self.right_score = 0
 
         #initalize the paddles (10 pixels from the edge, centered vertically)
         self.left_paddle = Paddle(10, self.HEIGHT * 0.5 - self.PADDLE_HEIGHT * 0.5, self.PADDLE_WIDTH, self.PADDLE_HEIGHT)
@@ -40,9 +41,13 @@ class Game:
         for paddle in (self.left_paddle, self.right_paddle): # loop over each paddle.
             paddle.draw_paddles(self.win) #Draw each paddle on the game window.
 
-        # draw the position and scoring text
-        left_score_text = self.font.render(f'P1: {self.left_score}', 1, self.WHITE)
-        self.win.blit(left_score_text, (self.WIDTH // 4 - left_score_text.get_width() * 0.5, 20))
+        # draw and position the left scoring text
+        left_score_text = self.font.render(f'P1: {self.left_score}', 1, self.WHITE) # create scoring text
+        self.win.blit(left_score_text, (self.WIDTH * 0.25 - left_score_text.get_width() * 0.5, 20)) # display scoring text
+        
+        #draw and position the right scoring text
+        right_score_text = self.font.render(f'P2: {self.right_score}', 1, self.WHITE)
+        self.win.blit(right_score_text, (self.WIDTH * 0.75 - right_score_text.get_width() * 0.75, 20))
 
         
         # draw ball
@@ -109,8 +114,11 @@ class Game:
             self.ball.move_ball()
 
             if self.ball.x < 0: # check if the ball has gone out of bounds (left)
-                self.ball.reset_ball() 
+                self.left_score += 1 # increment score
+                self.ball.reset_ball() # reset ball to orgin
+                
             elif self.ball.x > self.WIDTH: # check if the ball has gone out of bounds (right)
+                self.right_score += 1
                 self.ball.reset_ball()
 
             #define keys and pass it as a paramater to paddle_movement.

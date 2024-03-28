@@ -5,7 +5,6 @@ class Paddle:
     PADDLE_VELOCITY = 6
 
     def __init__(self, _x, _y, _width, _height):
-        #set x,y to both self.x,y and self.original_x,y (use original to reset paddles).
         self.x = self.original_x = _x
         self.y = self.original_y = _y
         self.width = _width
@@ -19,7 +18,7 @@ class Paddle:
     def move(self, up = True):
         #if up is true adjust paddle velocity to go up (y-coor.), else apply the opposite logic.
         if up:
-            self.y -= self.PADDLE_VELOCITY
+            self.y -= self.PADDLE_VELOCITY #move paddle up
 
         else:
-            self.y += self.PADDLE_VELOCITY        
+            self.y += self.PADDLE_VELOCITY # move paddle down
