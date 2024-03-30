@@ -9,6 +9,7 @@ class Game:
     RED = (255, 0, 0)
     PADDLE_WIDTH, PADDLE_HEIGHT = 10, 90
     BALL_RADIUS = 7
+    MAX_SCORE = 1
 
     def __init__(self):
         pygame.init()
@@ -97,14 +98,39 @@ class Game:
                     reduction_factor = (self.right_paddle.height * 0.5) / self.ball.MAX_VELOCITY 
                     y_velocity = difference_in_y / reduction_factor
                     self.ball.y_velocity = -1 * y_velocity 
+    
+    
+    def display_winner(self, winner_result):
+        winner_text = self.font.render(f'{winner_result}', 1, self.WHITE) # set result as the winner text.
+        winner_text_rect = winner_text.get_rect(center = (self.WIDTH * 0.5, self.HEIGHT * 0.5)) # enclose text in a rect, centered vertically and horizontally
+        self.win.fill(self.RED)
+        self.win.blit(winner_text, winner_text_rect) # display winner 
 
 
     def run_game(self):
+    
+        # create start window text.
+        start_text = self.font.render("Click to start the game.", True, self.WHITE) # create starting text
+        self.win.fill(self.RED) # fill window  background red.
+        self.win.blit(start_text, (self.WIDTH * 0.5 - start_text.get_width() * 0.5, self.HEIGHT * 0.5 - start_text.get_height() * 0.5)) # center vertically and horizontally
+        pygame.display.update() # update display
+
+        # wait for user click
+        waiting_for_click = True
+        while waiting_for_click: # while waiting for click display start text
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT: # check if user clicks the close button.
+                    waiting_for_click = False 
+                    pygame.quit # close the window
+                
+                elif event.type == pygame.MOUSEBUTTONDOWN: # check if user clicks mouse button
+                    waiting_for_click = False # break the loop and run the game.
+
         # run the game.
         run = True
         while run:
             for event in pygame.event.get():
-                if event.type == pygame.QUIT: # close window 
+                if event.type == pygame.QUIT: 
                     run = False # break the game loop
 
             #draw game objects.
@@ -115,11 +141,22 @@ class Game:
 
             if self.ball.x < 0: # check if the ball has gone out of bounds (left)
                 self.left_score += 1 # increment score
-                self.ball.reset_ball() # reset ball to orgin
+
+                if self.left_score >= self.MAX_SCORE: # check if max score is reached.
+                    self.display_winner("Player 1 is the winner!") # send parameter to display winner
+                    
+                
+                else:
+                    self.ball.reset_ball() # reset ball to orgin
                 
             elif self.ball.x > self.WIDTH: # check if the ball has gone out of bounds (right)
                 self.right_score += 1
-                self.ball.reset_ball()
+
+                if self.right_score >= self.MAX_SCORE:
+                    self.display_winner("Player 2 is the winner!")
+                
+                else:
+                    self.ball.reset_ball()
 
             #define keys and pass it as a paramater to paddle_movement.
             keys = pygame.key.get_pressed()
@@ -131,3 +168,4 @@ class Game:
             clock.tick(60)
 
             self.collision()
+

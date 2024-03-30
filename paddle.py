@@ -5,9 +5,9 @@ class Paddle:
     PADDLE_VELOCITY = 6
 
     def __init__(self, _x, _y, _width, _height):
-        self.x = self.original_x = _x
-        self.y = self.original_y = _y
-        self.width = _width
+        self.x = self.original_x = _x # x cord
+        self.y = self.original_y = _y # y cord
+        self.width = _width 
         self.height = _height
 
     #draw paddles on the window.

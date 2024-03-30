@@ -5,11 +5,11 @@ class Ball:
     MAX_VELOCITY = 4
 
     def __init__(self, _x, _y, _radius):
-        self.x = self.original_x = _x
-        self.y = self.original_y = _y
-        self.radius = _radius
-        self.x_velocity = self.MAX_VELOCITY
-        self.y_velocity = 0
+        self.x = self.original_x = _x # x cord
+        self.y = self.original_y = _y # y cord
+        self.radius = _radius # ball radius
+        self.x_velocity = self.MAX_VELOCITY 
+        self.y_velocity = 0 
 
     #draw the ball on the window.
     def draw_ball(self, win):
