@@ -21,6 +21,8 @@ class Game:
         #create game text font
         self.font = pygame.font.SysFont(None, 36)
 
+        self.load_game_prompt()
+
         #set scores to 0
         self.left_score = 0
         self.right_score = 0
@@ -31,6 +33,21 @@ class Game:
 
         #initalize the ball (centered vertically and horizontally).
         self.ball = Ball(self.WIDTH * 0.5, self.HEIGHT * 0.5, self.BALL_RADIUS)
+        
+    def load_game_prompt(self):
+        text = self.font.render("Do you want to load your preview game?(Y/N)", True, self.WHITE)
+        self.win.fill(self.RED)
+        self.win.blit(text,(self.WIDTH * 0.5 - text.get_width() * 0.5, self.HEIGHT * 0.5 - text.get_height()* 0.5))
+        pygame.display.update()
+         
+         # chek for y or n 
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_y:
+                        return True 
+                    elif event.key == pygame.K_n:
+                        return False
 
     
     def draw_objects(self):
