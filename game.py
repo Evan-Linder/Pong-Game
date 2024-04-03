@@ -35,19 +35,19 @@ class Game:
         self.ball = Ball(self.WIDTH * 0.5, self.HEIGHT * 0.5, self.BALL_RADIUS)
         
     def load_game_prompt(self):
-        text = self.font.render("Do you want to load your preview game?(Y/N)", True, self.WHITE)
-        self.win.fill(self.RED)
-        self.win.blit(text,(self.WIDTH * 0.5 - text.get_width() * 0.5, self.HEIGHT * 0.5 - text.get_height()* 0.5))
-        pygame.display.update()
+        load_game_text = self.font.render("Do you want to load your preview game? (Y/N)", True, self.WHITE) # create load game prompt text
+        self.win.fill(self.RED) # fill the background red
+        self.win.blit(load_game_text,(self.WIDTH * 0.5 - load_game_text.get_width() * 0.5, self.HEIGHT * 0.5 - load_game_text.get_height()* 0.5)) # display text, centered vertically and horizontally realtive to the text height and width
+        pygame.display.update() # update the display
+        
          
-         # chek for y or n 
         while True:
             for event in pygame.event.get():
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_y:
-                        return True 
-                    elif event.key == pygame.K_n:
-                        return False
+                if event.type == pygame.KEYDOWN: # check for key presses
+                    if event.key == pygame.K_y: 
+                        return True # load saved game
+                    elif event.key == pygame.K_n: 
+                        return False # load new game
 
     
     def draw_objects(self):
