@@ -59,7 +59,14 @@ class Game:
             "right_paddle": self.right_paddle,
             "ball": self.ball
         }
-        
+    def load_game(self, filename):
+        game_state = load_game_state(filename)
+        if game_state:
+            self.left_score = game_state["left_score"]
+            self.right_score = game_state["right_score"]
+            self.left_paddle = game_state["left_paddle"]
+            self.right_paddle = game_state["right_paddle"]
+            self.ball = game_state["ball"]
 
 
 
