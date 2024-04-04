@@ -1,7 +1,7 @@
 import pygame
 from paddle import *
 from ball import *
-
+from game_saver import *
 class Game:
     # game constants (unmutable).
     WIDTH, HEIGHT = 700, 500
@@ -9,7 +9,7 @@ class Game:
     RED = (255, 0, 0)
     PADDLE_WIDTH, PADDLE_HEIGHT = 10, 90
     BALL_RADIUS = 7
-    MAX_SCORE = 1
+    MAX_SCORE = 5
 
     def __init__(self):
         pygame.init()
@@ -21,19 +21,21 @@ class Game:
         #create game text font
         self.font = pygame.font.SysFont(None, 36)
 
-        # returns true or flase dpending on user input
-        self.load_game_prompt()
+        # returns true or false depending on user input from the prompt.
+        self.load_saved_game = self.load_game_prompt()
+        if self.load_saved_game:  # if true is returned load saved game.
+            self.load_game("saved_game.txt")
+        else:
+            #set scores to 0
+            self.left_score = 0
+            self.right_score = 0
 
-        #set scores to 0
-        self.left_score = 0
-        self.right_score = 0
+            #initalize the paddles (10 pixels from the edge, centered vertically)
+            self.left_paddle = Paddle(10, self.HEIGHT * 0.5 - self.PADDLE_HEIGHT * 0.5, self.PADDLE_WIDTH, self.PADDLE_HEIGHT)
+            self.right_paddle = Paddle(self.WIDTH - 10 - self.PADDLE_WIDTH, self.HEIGHT * 0.5 - self.PADDLE_HEIGHT * 0.5, self.PADDLE_WIDTH, self.PADDLE_HEIGHT)
 
-        #initalize the paddles (10 pixels from the edge, centered vertically)
-        self.left_paddle = Paddle(10, self.HEIGHT * 0.5 - self.PADDLE_HEIGHT * 0.5, self.PADDLE_WIDTH, self.PADDLE_HEIGHT)
-        self.right_paddle = Paddle(self.WIDTH - 10 - self.PADDLE_WIDTH, self.HEIGHT * 0.5 - self.PADDLE_HEIGHT * 0.5, self.PADDLE_WIDTH, self.PADDLE_HEIGHT)
-
-        #initalize the ball (centered vertically and horizontally).
-        self.ball = Ball(self.WIDTH * 0.5, self.HEIGHT * 0.5, self.BALL_RADIUS)
+            #initalize the ball (centered vertically and horizontally).
+            self.ball = Ball(self.WIDTH * 0.5, self.HEIGHT * 0.5, self.BALL_RADIUS)
         
     def load_game_prompt(self):
         load_game_text = self.font.render("Do you want to load your preview game? (Y/N)", True, self.WHITE) # create load game prompt text
@@ -59,6 +61,9 @@ class Game:
             "right_paddle": self.right_paddle,
             "ball": self.ball
         }
+        #save current game state to the file
+        save_game_state(game_state, filename)
+
     def load_game(self, filename):
         game_state = load_game_state(filename)
         if game_state:
@@ -68,10 +73,6 @@ class Game:
             self.right_paddle = game_state["right_paddle"]
             self.ball = game_state["ball"]
 
-
-
-
-    
     def draw_objects(self):
 
         #set background to red.
@@ -169,7 +170,8 @@ class Game:
         run = True
         while run:
             for event in pygame.event.get():
-                if event.type == pygame.QUIT: 
+                if event.type == pygame.QUIT:
+                    self.save_game("saved_game.txt") 
                     run = False # break the game loop
 
             #draw game objects.
