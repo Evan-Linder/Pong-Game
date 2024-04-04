@@ -21,6 +21,7 @@ class Game:
         #create game text font
         self.font = pygame.font.SysFont(None, 36)
 
+        # returns true or flase dpending on user input
         self.load_game_prompt()
 
         #set scores to 0
@@ -48,6 +49,20 @@ class Game:
                         return True # load saved game
                     elif event.key == pygame.K_n: 
                         return False # load new game
+    
+    def save_game(self, filename):
+        # save the current game state to a dictionary 
+        game_state = {
+            "left_score": self.left_score,
+            "right_score": self.right_score,
+            "left_paddle": self.left_paddle,
+            "right_paddle": self.right_paddle,
+            "ball": self.ball
+        }
+        
+
+
+
 
     
     def draw_objects(self):
