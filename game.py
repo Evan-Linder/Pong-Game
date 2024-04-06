@@ -2,8 +2,10 @@ import pygame
 from paddle import *
 from ball import *
 from game_saver import *
+import os
+
 class Game:
-    # game constants (unmutable).
+    # game constants (inmutable).
     WIDTH, HEIGHT = 700, 500
     WHITE = (255, 255, 255)
     RED = (255, 0, 0)
@@ -14,7 +16,7 @@ class Game:
     def __init__(self):
         pygame.init()
 
-        # set width and height in a tuple to avoid error and make it unmutable.
+        # set width and height of the window.
         self.win = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
         pygame.display.set_caption("Pong game-CIS 121")
 
@@ -23,9 +25,10 @@ class Game:
 
         # returns true or false depending on user input from the prompt.
         self.load_saved_game = self.load_game_prompt()
-        if self.load_saved_game:  # if true is returned load saved game.
-            self.load_game("saved_game.txt")
-        else:
+        if self.load_saved_game and os.path.exists:  # check if prompt returned true and if there is a saved game file
+            self.load_game("saved_game.txt") # load game
+
+        else: # initalize a new game
             #set scores to 0
             self.left_score = 0
             self.right_score = 0
@@ -38,6 +41,10 @@ class Game:
             self.ball = Ball(self.WIDTH * 0.5, self.HEIGHT * 0.5, self.BALL_RADIUS)
         
     def load_game_prompt(self):
+        # if there is no current saved_game.txt file skip the load game prompt.
+        if not os.path.exists("saved_game.txt"):
+            return False
+
         load_game_text = self.font.render("Do you want to load your preview game? (Y/N)", True, self.WHITE) # create load game prompt text
         self.win.fill(self.RED) # fill the background red
         self.win.blit(load_game_text,(self.WIDTH * 0.5 - load_game_text.get_width() * 0.5, self.HEIGHT * 0.5 - load_game_text.get_height()* 0.5)) # display text, centered vertically and horizontally realtive to the text height and width
@@ -65,8 +72,9 @@ class Game:
         save_game_state(game_state, filename)
 
     def load_game(self, filename):
+        #load the current saved_game.txt file
         game_state = load_game_state(filename)
-        if game_state:
+        if game_state: # check if game state is loaded
             self.left_score = game_state["left_score"]
             self.right_score = game_state["right_score"]
             self.left_paddle = game_state["left_paddle"]
@@ -146,6 +154,9 @@ class Game:
         self.win.fill(self.RED)
         self.win.blit(winner_text, winner_text_rect) # display winner 
 
+        if os.path.exists("saved_game.txt"): # check if there is a current saved game file
+            os.remove("saved_game.txt") # delete the saved game file
+
 
     def run_game(self):
     
@@ -171,7 +182,7 @@ class Game:
         while run:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.save_game("saved_game.txt") 
+                    self.save_game("saved_game.txt") #save current game state if user closes game before winner is displayed.
                     run = False # break the game loop
 
             #draw game objects.
@@ -207,6 +218,7 @@ class Game:
             # set game fps to 60 so velocity works accordingly (avoids screen tearing).
             clock = pygame.time.Clock()
             clock.tick(60)
-
+            
+            # check for collisions
             self.collision()
 
