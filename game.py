@@ -11,7 +11,7 @@ class Game:
     RED = (255, 0, 0)
     PADDLE_WIDTH, PADDLE_HEIGHT = 10, 90
     BALL_RADIUS = 7
-    MAX_SCORE = 5
+    MAX_SCORE = 5 # adjust for testing purposes
 
     def __init__(self):
         pygame.init()
@@ -47,7 +47,7 @@ class Game:
 
         load_game_text = self.font.render("Do you want to load your preview game? (Y/N)", True, self.WHITE) # create load game prompt text
         self.win.fill(self.RED) # fill the background red
-        self.win.blit(load_game_text,(self.WIDTH * 0.5 - load_game_text.get_width() * 0.5, self.HEIGHT * 0.5 - load_game_text.get_height()* 0.5)) # display text, centered vertically and horizontally realtive to the text height and width
+        self.win.blit(load_game_text,(self.WIDTH * 0.5 - load_game_text.get_width() * 0.5, self.HEIGHT * 0.5 - load_game_text.get_height()* 0.5)) # display text, centered vertically and horizontally relative to the text height and width
         pygame.display.update() # update the display
         
          
@@ -153,6 +153,15 @@ class Game:
         winner_text_rect = winner_text.get_rect(center = (self.WIDTH * 0.5, self.HEIGHT * 0.5)) # enclose text in a rect, centered vertically and horizontally
         self.win.fill(self.RED)
         self.win.blit(winner_text, winner_text_rect) # display winner 
+        pygame.display.update()
+
+        # Event loop for the winner window
+        waiting_for_click = True
+        while waiting_for_click:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT: # check if user clicks the close button.
+                    waiting_for_click = False # break the loop 
+                    pygame.quit() # close the window
 
         if os.path.exists("saved_game.txt"): # check if there is a current saved game file
             os.remove("saved_game.txt") # delete the saved game file
@@ -166,12 +175,12 @@ class Game:
         self.win.blit(start_text, (self.WIDTH * 0.5 - start_text.get_width() * 0.5, self.HEIGHT * 0.5 - start_text.get_height() * 0.5)) # center vertically and horizontally
         pygame.display.update() # update display
 
-        # wait for user click
+        
         waiting_for_click = True
-        while waiting_for_click: # while waiting for click display start text
+        while waiting_for_click: # wait for user click
             for event in pygame.event.get():
                 if event.type == pygame.QUIT: # check if user clicks the close button.
-                    waiting_for_click = False 
+                    waiting_for_click = False # break the loop 
                     pygame.quit # close the window
                 
                 elif event.type == pygame.MOUSEBUTTONDOWN: # check if user clicks mouse button
@@ -193,10 +202,11 @@ class Game:
 
             if self.ball.x < 0: # check if the ball has gone out of bounds (left)
                 self.left_score += 1 # increment score
+                
 
                 if self.left_score >= self.MAX_SCORE: # check if max score is reached.
-                    self.display_winner("Player 1 is the winner!") # send parameter to display winner
-                    
+                    winner_name = "Player 1" # send parameter to display winner
+                    run = False
                 
                 else:
                     self.ball.reset_ball() # reset ball to orgin
@@ -205,7 +215,8 @@ class Game:
                 self.right_score += 1
 
                 if self.right_score >= self.MAX_SCORE:
-                    self.display_winner("Player 2 is the winner!")
+                    winner_name = "Player 2"
+                    run = False
                 
                 else:
                     self.ball.reset_ball()
@@ -221,4 +232,9 @@ class Game:
             
             # check for collisions
             self.collision()
+
+        # check for winner
+        if winner_name:
+            self.display_winner(f"{winner_name} is the winner!") # display the winner
+
 

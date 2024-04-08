@@ -1,4 +1,4 @@
-import pygame
+import pygame, random
 
 class Ball:
     WHITE = (255, 255, 255)
@@ -8,8 +8,11 @@ class Ball:
         self.x = self.original_x = _x # x cord
         self.y = self.original_y = _y # y cord
         self.radius = _radius # ball radius
-        self.x_velocity = self.MAX_VELOCITY 
-        self.y_velocity = 0 
+        self.x_velocity = random.choice([-self.MAX_VELOCITY, self.MAX_VELOCITY]) # randomize the x velocity of the ball on start
+        self.y_velocity = 0 # set to 0 for testing purposes
+        
+        # This will randomize the y velocity of the ball, commented out for testing purposes
+        '''self.y_velocity = random.choice([-self.MAX_VELOCITY, self.MAX_VELOCITY]) '''
 
     #draw the ball on the window.
     def draw_ball(self, win):
@@ -20,12 +23,16 @@ class Ball:
         self.x += self.x_velocity # update x-cord with x-velocity
         self.y += self.y_velocity # update y-cord with y-velocity
     
-    #reset the ball to original position and reverse the velocity.
+    #reset the ball to its default position and reverse the velocity.
     def reset_ball(self):
-        self.x = self.original_x
-        self.y = self.original_y
-        self.y_velocity = 0
-        self.x_velocity *= -1
+        self.x = self.original_x # set x cord to defaulted its value
+        self.y = self.original_y # set y cord to defaulted its value
+        self.y_velocity = 0 # set to 0 for testing purposes
+        self.x_velocity =  random.choice([-self.MAX_VELOCITY, self.MAX_VELOCITY]) # randomize x velocity
+
+        '''self.y_velocity = random.choice([-self.MAX_VELOCITY, self.MAX_VELOCITY])'''
+
+
 
 
 
