@@ -168,7 +168,9 @@ class Game:
 
 
     def run_game(self):
-    
+        # initalize winner name to avoid name errors
+        winner_name = None
+
         # create start window text.
         start_text = self.font.render("Click to start the game.", True, self.WHITE) # create starting text
         self.win.fill(self.RED) # fill window  background red.
