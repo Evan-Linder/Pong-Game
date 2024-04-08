@@ -18,18 +18,19 @@ class Ball:
     def draw_ball(self, win):
         pygame.draw.circle(win, self.WHITE, (self.x, self.y), self.radius)
 
-    #adjust the velocity of the ball
+    # adjust the velocity of the ball
     def move_ball(self):
         self.x += self.x_velocity # update x-cord with x-velocity
         self.y += self.y_velocity # update y-cord with y-velocity
     
     #reset the ball to its default position and reverse the velocity.
     def reset_ball(self):
-        self.x = self.original_x # set x cord to defaulted its value
-        self.y = self.original_y # set y cord to defaulted its value
+        self.x = self.original_x # set x cord to its defaulted value
+        self.y = self.original_y # set y cord to its defaulted value
         self.y_velocity = 0 # set to 0 for testing purposes
         self.x_velocity =  random.choice([-self.MAX_VELOCITY, self.MAX_VELOCITY]) # randomize x velocity
 
+        # commented out for tesing purposes
         '''self.y_velocity = random.choice([-self.MAX_VELOCITY, self.MAX_VELOCITY])'''
 
 

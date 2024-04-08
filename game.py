@@ -155,12 +155,12 @@ class Game:
         self.win.blit(winner_text, winner_text_rect) # display winner 
         pygame.display.update()
 
-        # Event loop for the winner window
-        waiting_for_click = True
-        while waiting_for_click:
+        # loop for the winner window
+        waiting_for_close = True
+        while waiting_for_close:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT: # check if user clicks the close button.
-                    waiting_for_click = False # break the loop 
+                    waiting_for_close = False # break the loop 
                     pygame.quit() # close the window
 
         if os.path.exists("saved_game.txt"): # check if there is a current saved game file
@@ -205,8 +205,8 @@ class Game:
                 
 
                 if self.left_score >= self.MAX_SCORE: # check if max score is reached.
-                    winner_name = "Player 1" # send parameter to display winner
-                    run = False
+                    winner_name = "Player 1" # set winner name
+                    run = False # break the game loop
                 
                 else:
                     self.ball.reset_ball() # reset ball to orgin
