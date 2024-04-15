@@ -8,7 +8,7 @@ CIS 121
 Movement for left paddle: up (W), down (S)
 Movement for right paddle: up (Up Arrow), down (Down Arrow) 
 
-First to 5 wins, you can change the max score within the game.py file 
+First to 3 wins, you can change the max score within the game.py file 
 for testing purposes if you wish. Also, within the ball file, I commented 
 out the code that randomizes the y velocity of the ball on game starts and ball resets 
 for easier testing.

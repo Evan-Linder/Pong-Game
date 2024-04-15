@@ -11,7 +11,7 @@ class Game:
     RED = (255, 0, 0)
     PADDLE_WIDTH, PADDLE_HEIGHT = 10, 90
     BALL_RADIUS = 7
-    MAX_SCORE = 1 # adjust this for testing purposes if you wish
+    MAX_SCORE = 3 # adjust this for testing purposes if you wish
 
     def __init__(self):
         pygame.init()
