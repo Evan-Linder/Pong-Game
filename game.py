@@ -11,7 +11,7 @@ class Game:
     RED = (255, 0, 0)
     PADDLE_WIDTH, PADDLE_HEIGHT = 10, 90
     BALL_RADIUS = 7
-    MAX_SCORE = 3 # adjust this for testing purposes if you wish
+    MAX_SCORE = 1 # adjust this for testing purposes if you wish
 
     def __init__(self):
         pygame.init()
@@ -163,7 +163,7 @@ class Game:
         self.win.fill(self.RED)
         self.win.blit(winner_text, winner_text_rect) # display winner 
         pygame.display.update()
-
+   
         # loop for the winner window
         waiting_for_close = True
         while waiting_for_close:
@@ -258,6 +258,7 @@ class Game:
         # check for winner
         if self.winner_name:
             self.display_winner(f"{self.winner_name} is the winner!") # display the winner
-            pygame.display.update()
+           
+
 
 
