@@ -1,8 +1,10 @@
 import pickle
+import os
 
 # save game to a binary file to allow the use of a dictionary.
 def save_game_state(game_state, filename):
-    with open(filename, "wb") as file: # write as a binary file
+    custom_file_path = os.path.join("utils", filename) # save the game state to the utils folder.
+    with open(custom_file_path, "wb") as file: # write as a binary file
         pickle.dump(game_state, file) # write game state to file
 
 def load_game_state(filename):
