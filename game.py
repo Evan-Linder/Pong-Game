@@ -1,7 +1,7 @@
 import pygame, os
 from paddle import *
 from ball import *
-from game_saver import *
+from game_util import *
 
 
 class Game:
@@ -11,7 +11,7 @@ class Game:
     RED = (255, 0, 0)
     PADDLE_WIDTH, PADDLE_HEIGHT = 10, 90
     BALL_RADIUS = 7
-    MAX_SCORE = 5 # adjust for testing purposes
+    MAX_SCORE = 1 # adjust for testing purposes
 
     def __init__(self):
         pygame.init()
@@ -39,6 +39,12 @@ class Game:
 
             #initalize the ball (centered vertically and horizontally).
             self.ball = Ball(self.WIDTH * 0.5, self.HEIGHT * 0.5, self.BALL_RADIUS)
+
+            #create a instance of the paused state.
+            self.pause_state = PauseState()
+
+            # initalize winner name to avoid name errors when loading saved games.
+            self.winner_name = None
         
     def load_game_prompt(self):
         # if there is no current saved_game.txt file skip the load game prompt.
@@ -81,6 +87,7 @@ class Game:
             self.left_paddle = game_state["left_paddle"]
             self.right_paddle = game_state["right_paddle"]
             self.ball = game_state["ball"]
+            self.pause_state = PauseState()
 
     def draw_objects(self):
 
@@ -100,6 +107,12 @@ class Game:
 
         # draw ball
         self.ball.draw_ball(self.win)
+        # Draw the paused state if the game is paused.
+        if self.pause_state.is_paused():
+            paused_text = self.font.render("PAUSED", 1, self.WHITE)
+            paused_rect = paused_text.get_rect(center=(self.WIDTH // 2, self.HEIGHT // 2))
+            self.win.blit(paused_text, paused_rect)
+        pygame.display.update()
             
     def paddle_movement(self, keys):
         # checks left paddle for key presses. (W and S)
@@ -163,11 +176,16 @@ class Game:
 
         if os.path.exists("saved_game.txt"): # check if there is a current saved game file
             os.remove("saved_game.txt") # delete the saved game file
+    
+    # Function to display "PAUSED" text on the game window.
+    def display_paused_text(self):
+        paused_text = self.font.render("Paused", 1, self.WHITE) # create paused text
+        paused_text_rect = paused_text.get_rect(center = (self.WIDTH * 0.5, self.HEIGHT * 0.5)) # centered vertically and horizontally
+        self.win.blit(paused_text, paused_text_rect) # display paused text on the window.
+        pygame.display.update() 
 
     def run_game(self):
-        # initalize winner name to avoid name errors
-        winner_name = None
-
+        
         # create start window text.
         start_text = self.font.render("Click to start the game.", True, self.WHITE) # create starting text
         self.win.fill(self.RED) # fill window  background red.
@@ -191,47 +209,56 @@ class Game:
                 if event.type == pygame.QUIT:
                     self.save_game("saved_game.txt") #save current game state if user closes game before winner is displayed.
                     run = False # break the game loop
-
-            #draw game objects.
-            self.draw_objects()
-
-            #ball movement/reset if the ball goes out of bounds (left or right). 
-            self.ball.move_ball()
-
-            if self.ball.x < 0: # check if the ball has gone out of bounds (left)
-                self.left_score += 1 # increment score
+                
+                # check for pause key press (space)
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                    self.pause_state.toggle_pause()
             
-                if self.left_score >= self.MAX_SCORE: # check if max score is reached.
-                    winner_name = "Player 1" # set winner name
-                    run = False # break the game loop
-                
-                else:
-                    self.ball.reset_ball() # reset ball to orgin
-                
-            elif self.ball.x > self.WIDTH: # check if the ball has gone out of bounds (right)
-                self.right_score += 1
+            # check if game is paused
+            if not self.pause_state.is_paused():
+                #draw game objects.
+                self.draw_objects()
 
-                if self.right_score >= self.MAX_SCORE:
-                    winner_name = "Player 2"
-                    run = False
+                #ball movement/reset if the ball goes out of bounds (left or right). 
+                self.ball.move_ball()
+
+                if self.ball.x < 0: # check if the ball has gone out of bounds (left)
+                    self.left_score += 1 # increment score
                 
-                else:
-                    self.ball.reset_ball()
+                    if self.left_score >= self.MAX_SCORE: # check if max score is reached.
+                        self.winner_name = "Player 1" # set winner name
+                        run = False # break the game loop
+                    
+                    else:
+                        self.ball.reset_ball() # reset ball to orgin
+                    
+                elif self.ball.x > self.WIDTH: # check if the ball has gone out of bounds (right)
+                    self.right_score += 1
 
-            #define keys and pass it as a paramater to paddle_movement.
-            keys = pygame.key.get_pressed()
-            self.paddle_movement(keys)
-            pygame.display.update()
+                    if self.right_score >= self.MAX_SCORE:
+                        self.winner_name = "Player 2"
+                        run = False
+                    
+                    else:
+                        self.ball.reset_ball()
 
-            # set game fps to 60 so velocity works accordingly (avoids screen tearing).
-            clock = pygame.time.Clock()
-            clock.tick(60)
-            
-            # check for collisions
-            self.collision()
+                #define keys and pass it as a paramater to paddle_movement.
+                keys = pygame.key.get_pressed()
+                self.paddle_movement(keys)
+                pygame.display.update()
+
+                # set game fps to 60 so velocity works accordingly (avoids screen tearing).
+                clock = pygame.time.Clock()
+                clock.tick(60)
+                
+                # check for collisions
+                self.collision()
+
+            else: # display "paused" text
+                self.display_paused_text()
 
         # check for winner
-        if winner_name:
-            self.display_winner(f"{winner_name} is the winner!") # display the winner
+        if self.winner_name:
+            self.display_winner(f"{self.winner_name} is the winner!") # display the winner
 
 

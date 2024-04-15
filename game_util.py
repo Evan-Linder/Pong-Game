@@ -1,4 +1,4 @@
-import pickle 
+import pickle
 
 # save game to a binary file to allow the use of a dictionary.
 def save_game_state(game_state, filename):
@@ -12,3 +12,16 @@ def load_game_state(filename):
         return game_state # return the game state.
     except FileNotFoundError:
         return None # return none if file is not found.
+
+class PauseState:
+
+    def __init__(self):
+        self.paused = False
+
+    def toggle_pause(self):
+        self.paused = not self.paused
+
+    def is_paused(self):
+        return self.paused
+    
+
