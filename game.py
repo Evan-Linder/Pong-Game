@@ -11,7 +11,7 @@ class Game:
     RED = (255, 0, 0)
     PADDLE_WIDTH, PADDLE_HEIGHT = 10, 90
     BALL_RADIUS = 7
-    MAX_SCORE = 3 # adjust this for testing purposes
+    MAX_SCORE = 3 # adjust this for testing purposes if you wish
 
     def __init__(self):
         pygame.init()
@@ -26,7 +26,7 @@ class Game:
         # returns true or false depending on user input from the prompt.
         self.load_saved_game = self.load_game_prompt()
         if self.load_saved_game and os.path.exists:  # check if prompt returned true and if there is a saved game file
-            self.load_game("saved_game.txt") # load game
+            self.load_game("saved_game.txt") # load saved game
 
         else: # initalize a new game
             #set scores to 0
@@ -59,6 +59,8 @@ class Game:
          
         while True:
             for event in pygame.event.get():
+                if event.type == pygame.QUIT: # check if user closes the window
+                    pygame.quit()
                 if event.type == pygame.KEYDOWN: # check for key presses
                     if event.key == pygame.K_y: 
                         return True # load saved game
@@ -87,10 +89,10 @@ class Game:
             self.left_paddle = game_state["left_paddle"]
             self.right_paddle = game_state["right_paddle"]
             self.ball = game_state["ball"]
-            self.pause_state = PauseState()
+            self.pause_state = PauseState() 
+            self.winner_name = None
 
     def draw_objects(self):
-
         #set background to red.
         self.win.fill(self.RED)
 
@@ -107,11 +109,6 @@ class Game:
 
         # draw ball
         self.ball.draw_ball(self.win)
-        # Draw the paused state if the game is paused.
-        if self.pause_state.is_paused():
-            paused_text = self.font.render("PAUSED", 1, self.WHITE)
-            paused_rect = paused_text.get_rect(center = (self.WIDTH * 0.5, self.HEIGHT * 0.5))
-            self.win.blit(paused_text, paused_rect)
         
         pygame.display.update()
             
@@ -209,6 +206,7 @@ class Game:
                 if event.type == pygame.QUIT:
                     self.save_game("saved_game.txt") #save current game state if user closes game before winner is displayed.
                     run = False # break the game loop
+                    
                 
                 # check for pause key press (space)
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:

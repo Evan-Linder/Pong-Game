@@ -13,6 +13,8 @@ for testing purposes if you wish. Also, within the ball file, I commented
 out the code that randomizes the y velocity of the ball on game starts and ball resets 
 for easier testing.
 
+Space bar will pause and unpause the game.
+
 Closing the game using the close button ("X"), will 
 create a saved_game.txt file. Upon reopening the game, 
 you will be prompted to load the saved game file. If you chose 
