@@ -13,14 +13,14 @@ for testing purposes if you wish. Also, within the ball file, I commented
 out the code that randomizes the y velocity of the ball on game starts and ball resets 
 for easier testing.
 
-Space bar will pause and unpause the game.
+Spacebar will pause and unpause the game.
 
-Closing the game using the close button ("X"), will 
+Closing the game using the close button ("X") during a current game will 
 create a saved_game.txt file. Upon reopening the game, 
 you will be prompted to load the saved game file. If you chose 
-not to load the game file, it will initalize a fresh game. After 
-the max score is reached and the winner is displayed, the saved game
-file will be deleted.
+not to load the game file, it will initalize a fresh game and delete the saved file. After 
+the max score is reached the winner is displayed. If there is a saved game
+file it will be deleted.
 '''
 
 from game import *

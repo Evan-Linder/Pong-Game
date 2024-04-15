@@ -1,7 +1,7 @@
 import pygame, os
-from paddle import *
-from ball import *
-from game_util import *
+from models.paddle import *
+from models.ball import *
+from utils.game_util import *
 
 
 class Game:
@@ -182,7 +182,6 @@ class Game:
         pygame.display.update() 
 
     def run_game(self):
-        
         # create start window text.
         start_text = self.font.render("Click to start the game.", True, self.WHITE) # create starting text
         self.win.fill(self.RED) # fill window  background red.
