@@ -1,5 +1,4 @@
 import pickle
-import os
 
 # save game to a binary file to allow the use of a dictionary.
 def save_game_state(game_state, file_name):
