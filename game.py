@@ -26,7 +26,7 @@ class Game:
         # returns true or false depending on user input from the prompt.
         self.load_saved_game = self.load_game_prompt()
         if self.load_saved_game and os.path.exists:  # check if prompt returned true and if there is a saved game file
-            self.load_game("saved_game.txt") # load saved game
+            self.load_game("utils/saved_game.txt") # load saved game
 
         else: # initalize a new game
             #set scores to 0
@@ -48,7 +48,7 @@ class Game:
         
     def load_game_prompt(self):
         # if there is no current saved_game.txt file skip the load game prompt.
-        if not os.path.exists("saved_game.txt"):
+        if not os.path.exists("utils/saved_game.txt"):
             return False
 
         load_game_text = self.font.render("Do you want to load your preview game? (Y/N)", True, self.WHITE) # create load game prompt text
@@ -65,7 +65,7 @@ class Game:
                     if event.key == pygame.K_y: 
                         return True # load saved game
                     elif event.key == pygame.K_n: 
-                        os.remove("saved_game.txt") # delete saved game
+                        os.remove("utils/saved_game.txt") # delete saved game
                         return False # load new game
     
     def save_game(self, filename):
@@ -172,8 +172,8 @@ class Game:
                     waiting_for_close = False # break the loop 
                     pygame.quit() # close the window
 
-        if os.path.exists("saved_game.txt"): # check if there is a current saved game file
-            os.remove("saved_game.txt") # delete the saved game file
+        if os.path.exists("utils/saved_game.txt"): # check if there is a current saved game file
+            os.remove("utils/saved_game.txt") # delete the saved game file
     
     def display_paused(self):
         paused_text = self.font.render("Paused", 1, self.WHITE) # create paused text
@@ -203,7 +203,7 @@ class Game:
         while run:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.save_game("saved_game.txt") #save current game state if user closes game before winner is displayed.
+                    self.save_game("utils/saved_game.txt") #save current game state if user closes game before winner is displayed.
                     run = False # break the game loop
                     
                 
