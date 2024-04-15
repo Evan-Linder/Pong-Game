@@ -11,7 +11,7 @@ class Game:
     RED = (255, 0, 0)
     PADDLE_WIDTH, PADDLE_HEIGHT = 10, 90
     BALL_RADIUS = 7
-    MAX_SCORE = 1 # adjust for testing purposes
+    MAX_SCORE = 3 # adjust this for testing purposes
 
     def __init__(self):
         pygame.init()
@@ -110,8 +110,9 @@ class Game:
         # Draw the paused state if the game is paused.
         if self.pause_state.is_paused():
             paused_text = self.font.render("PAUSED", 1, self.WHITE)
-            paused_rect = paused_text.get_rect(center=(self.WIDTH // 2, self.HEIGHT // 2))
+            paused_rect = paused_text.get_rect(center = (self.WIDTH * 0.5, self.HEIGHT * 0.5))
             self.win.blit(paused_text, paused_rect)
+        
         pygame.display.update()
             
     def paddle_movement(self, keys):
@@ -177,8 +178,7 @@ class Game:
         if os.path.exists("saved_game.txt"): # check if there is a current saved game file
             os.remove("saved_game.txt") # delete the saved game file
     
-    # Function to display "PAUSED" text on the game window.
-    def display_paused_text(self):
+    def display_paused(self):
         paused_text = self.font.render("Paused", 1, self.WHITE) # create paused text
         paused_text_rect = paused_text.get_rect(center = (self.WIDTH * 0.5, self.HEIGHT * 0.5)) # centered vertically and horizontally
         self.win.blit(paused_text, paused_text_rect) # display paused text on the window.
@@ -211,11 +211,12 @@ class Game:
                     run = False # break the game loop
                 
                 # check for pause key press (space)
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                    self.pause_state.toggle_pause()
+                elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                    self.pause_state.toggle_pause() # toggle pause
             
             # check if game is paused
             if not self.pause_state.is_paused():
+                
                 #draw game objects.
                 self.draw_objects()
 
@@ -255,10 +256,11 @@ class Game:
                 self.collision()
 
             else: # display "paused" text
-                self.display_paused_text()
+                self.display_paused()
 
         # check for winner
         if self.winner_name:
             self.display_winner(f"{self.winner_name} is the winner!") # display the winner
+            pygame.display.update()
 
 

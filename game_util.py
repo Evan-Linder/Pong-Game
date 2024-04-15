@@ -14,14 +14,13 @@ def load_game_state(filename):
         return None # return none if file is not found.
 
 class PauseState:
-
     def __init__(self):
-        self.paused = False
+        self.paused = False 
 
     def toggle_pause(self):
-        self.paused = not self.paused
+        self.paused = not self.paused # toggle pause state (false => true and true => false)
 
     def is_paused(self):
-        return self.paused
+        return self.paused # return pause state.
     
 
