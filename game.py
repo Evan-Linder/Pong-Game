@@ -1,8 +1,8 @@
-import pygame
+import pygame, os
 from paddle import *
 from ball import *
 from game_saver import *
-import os
+
 
 class Game:
     # game constants (inmutable).
@@ -57,6 +57,7 @@ class Game:
                     if event.key == pygame.K_y: 
                         return True # load saved game
                     elif event.key == pygame.K_n: 
+                        os.remove("saved_game.txt") # delete saved game
                         return False # load new game
     
     def save_game(self, filename):
@@ -86,7 +87,6 @@ class Game:
         #set background to red.
         self.win.fill(self.RED)
 
-
         for paddle in (self.left_paddle, self.right_paddle): # loop over each paddle.
             paddle.draw_paddles(self.win) #Draw each paddle on the game window.
 
@@ -98,7 +98,6 @@ class Game:
         right_score_text = self.font.render(f'P2: {self.right_score}', 1, self.WHITE)
         self.win.blit(right_score_text, (self.WIDTH * 0.75 - right_score_text.get_width() * 0.75, 20))
 
-        
         # draw ball
         self.ball.draw_ball(self.win)
             
@@ -147,7 +146,6 @@ class Game:
                     y_velocity = difference_in_y / reduction_factor
                     self.ball.y_velocity = -1 * y_velocity 
     
-    
     def display_winner(self, winner_result):
         winner_text = self.font.render(f'{winner_result}', 1, self.WHITE) # set result as the winner text.
         winner_text_rect = winner_text.get_rect(center = (self.WIDTH * 0.5, self.HEIGHT * 0.5)) # enclose text in a rect, centered vertically and horizontally
@@ -166,7 +164,6 @@ class Game:
         if os.path.exists("saved_game.txt"): # check if there is a current saved game file
             os.remove("saved_game.txt") # delete the saved game file
 
-
     def run_game(self):
         # initalize winner name to avoid name errors
         winner_name = None
@@ -177,13 +174,12 @@ class Game:
         self.win.blit(start_text, (self.WIDTH * 0.5 - start_text.get_width() * 0.5, self.HEIGHT * 0.5 - start_text.get_height() * 0.5)) # center vertically and horizontally
         pygame.display.update() # update display
 
-        
         waiting_for_click = True
         while waiting_for_click: # wait for user click
             for event in pygame.event.get():
                 if event.type == pygame.QUIT: # check if user clicks the close button.
                     waiting_for_click = False # break the loop 
-                    pygame.quit # close the window
+                    pygame.quit() # close the window
                 
                 elif event.type == pygame.MOUSEBUTTONDOWN: # check if user clicks mouse button
                     waiting_for_click = False # break the loop and run the game.
@@ -204,8 +200,7 @@ class Game:
 
             if self.ball.x < 0: # check if the ball has gone out of bounds (left)
                 self.left_score += 1 # increment score
-                
-
+            
                 if self.left_score >= self.MAX_SCORE: # check if max score is reached.
                     winner_name = "Player 1" # set winner name
                     run = False # break the game loop
